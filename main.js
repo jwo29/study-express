@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express(); // 상수 express는 함수이며, 어플리케이션 객체를 반환한다
-const port =3000;
+const port =2000;
 const fs = require('fs');
 var template = require('./lib/template.js');
 var path = require('path');
@@ -10,6 +10,7 @@ var qs = require('querystring');
 var bodyParser = require('body-parser');
 var compression = require('compression');
 
+app.use(express.static('public'));
 app.use(bodyParser.urlencoded({exteded: false}));
 // compression()은 compression 미들웨어를 반환함
 app.use(compression()); // app.use를 통해 compression을 장착하는 형태
@@ -29,7 +30,10 @@ app.get('/', function(req, res){
   var description = 'Hello, Node.js';
   var list = template.list(req.list);
   var html = template.HTML(title, list,
-    `<h2>${title}</h2>${description}`,
+    `
+    <h2>${title}</h2>${description}
+    <img src="/images/hello.jpg" style="width:300px; display:block; margin-top:10px;">`,
+    
     `<a href="/create">create</a>`
   );
   res.send(html); // send() === writeHead() + end()
